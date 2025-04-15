@@ -19,8 +19,8 @@ catalogs:
       specifier: ^1.10.1
       version: 1.10.1
     '@platforma-open/milaboratories.runenv-python-3':
-      specifier: ^1.1.7
-      version: 1.1.7
+      specifier: ^1.1.9
+      version: 1.1.9
     '@platforma-open/milaboratories.samples-and-data':
       specifier: ^1.10.4
       version: 1.10.4
@@ -180,7 +180,7 @@ importers:
     dependencies:
       '@platforma-open/milaboratories.runenv-python-3':
         specifier: 'catalog:'
-        version: 1.1.7
+        version: 1.1.9
     devDependencies:
       '@platforma-sdk/package-builder':
         specifier: 'catalog:'
@@ -190,7 +190,7 @@ importers:
     dependencies:
       '@platforma-open/milaboratories.runenv-python-3':
         specifier: 'catalog:'
-        version: 1.1.7
+        version: 1.1.9
     devDependencies:
       '@platforma-sdk/package-builder':
         specifier: 'catalog:'
@@ -1242,6 +1242,9 @@ packages:
 
   '@platforma-open/milaboratories.runenv-python-3@1.1.7':
     resolution: {integrity: sha512-b3hWUFMQOG0O3JExLXyRhXQ5t/XQu3dNrcGyQ/RfllIX9RPYLA5yYRG6x2uc7m9LYqOD/GjMWUQ1TCTbRaBxnQ==}
+
+  '@platforma-open/milaboratories.runenv-python-3@1.1.9':
+    resolution: {integrity: sha512-j41u+ro2jOBOFJ1NR2pTJRAPCrJjvOTdTWVoYFrYUBRrkbBcjrgPWyu819hXjxeeOMbpP1xCv2KaSqtQ8AvAmw==}
 
   '@platforma-open/milaboratories.samples-and-data.model@1.10.0':
     resolution: {integrity: sha512-b8YAx2pXQOSTe8sppR4bMOZ8sNN42RUSQuzOaHNQR4ZZWSnmslksEM9p/EMO/1JyL1hUW92dcpQtK/FH3QcMcQ==}
@@ -5087,6 +5090,8 @@ snapshots:
       - typescript
 
   '@platforma-open/milaboratories.runenv-python-3@1.1.7': {}
+
+  '@platforma-open/milaboratories.runenv-python-3@1.1.9': {}
 
   '@platforma-open/milaboratories.samples-and-data.model@1.10.0':
     dependencies:
