@@ -8,6 +8,8 @@ packages:
   - test
 
 catalog:
+  '@milaboratories/ts-configs': ^1
+  '@milaboratories/build-configs': ^1
   '@platforma-sdk/workflow-tengo': ^4.7.1
   '@platforma-sdk/model': ^1.33.10
   '@platforma-sdk/ui-vue': ^1.33.13

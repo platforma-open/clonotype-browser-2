@@ -8,6 +8,8 @@ import type {
   PColumnEntryUniversal,
   InferOutputsType,
   AnchoredPColumnSelector,
+  AnnotationScript,
+  AnnotationScriptUi,
 } from '@platforma-sdk/model';
 import {
   BlockModel,
@@ -16,11 +18,8 @@ import {
   createPlDataTableV2,
   getUniquePartitionKeys,
   PColumnCollection,
-  selectorsToPredicate,
 } from '@platforma-sdk/model';
 import * as R from 'remeda';
-import type { AnnotationScript } from './filter';
-import type { AnnotationScriptUi } from './filters_ui';
 
 type BlockArgs = {
   /** Anchor column from the clonotyping output (must have sampleId and clonotypeKey axes) */
@@ -32,11 +31,6 @@ type BlockArgs = {
 
 export type UiState = {
   settingsOpen: boolean;
-  statsTable: {
-    tableState: PlDataTableState;
-    filterModel: PlTableFiltersModel;
-  };
-  annotationScript: AnnotationScriptUi;
   overlapTable: {
     filterModel: PlTableFiltersModel;
     tableState: PlDataTableState;
@@ -44,6 +38,11 @@ export type UiState = {
   perSampleTable: {
     filterModel: PlTableFiltersModel;
     tableState: PlDataTableState;
+  };
+  annotationScript: AnnotationScriptUi;
+  statsTable: {
+    tableState: PlDataTableState;
+    filterModel: PlTableFiltersModel;
   };
 };
 
@@ -305,13 +304,6 @@ export const platforma = BlockModel.create('Heavy')
     return createPlDataTableV2(
       ctx,
       columns,
-      selectorsToPredicate({
-        name: 'pl7.app/vdj/sequence',
-        domain: {
-          'pl7.app/vdj/feature': 'CDR3',
-          'pl7.app/alphabet': 'nucleotide',
-        },
-      }),
       ctx.uiState.overlapTable.tableState,
       { filters: ctx.uiState.overlapTable.filterModel?.filters },
     );
@@ -366,13 +358,6 @@ export const platforma = BlockModel.create('Heavy')
     const model = createPlDataTableV2(
       ctx,
       columns,
-      selectorsToPredicate({
-        name: 'pl7.app/vdj/sequence',
-        domain: {
-          'pl7.app/vdj/feature': 'CDR3',
-          'pl7.app/alphabet': 'nucleotide',
-        },
-      }),
       ctx.uiState.perSampleTable.tableState,
       { filters: ctx.uiState.perSampleTable.filterModel?.filters },
     );
@@ -426,9 +411,8 @@ export const platforma = BlockModel.create('Heavy')
 
   .done();
 
+export type Platforma = typeof platforma;
+
 export type BlockOutputs = InferOutputsType<typeof platforma>;
 export type Href = InferHrefType<typeof platforma>;
-export { BlockArgs };
-
-export * from './filter';
-export * from './filters_ui';
+export type { BlockArgs };

@@ -8,9 +8,9 @@ import {
   PlAgDataTableToolsPanel,
   PlBtnGhost,
 } from '@platforma-sdk/ui-vue';
+import { AnnotationsModal } from '@platforma-sdk/ui-vue';
 import { computed, ref } from 'vue';
 import { useApp } from './app';
-import AnnotationsModal from './Annotations/AnnotationsModal.vue';
 
 const app = useApp();
 
@@ -49,5 +49,10 @@ const columns = ref<PTableColumnSpec[]>([]);
       />
     </div>
   </PlBlockPage>
-  <AnnotationsModal />
+  <AnnotationsModal
+    v-model:ui="app.model.ui.annotationScript"
+    v-model:args="app.model.args.annotationScript"
+    v-model:opened="app.isAnnotationModalOpen"
+    :columns="app.filterColumns"
+  />
 </template>

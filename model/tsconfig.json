@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "customConditions": ["development"],
     "target": "es2022",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "es2022",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "strict": true,
     "outDir": "./dist",

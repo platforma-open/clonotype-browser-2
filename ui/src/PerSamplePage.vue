@@ -12,7 +12,7 @@ import {
 } from '@platforma-sdk/ui-vue';
 import { computed, ref } from 'vue';
 import { useApp } from './app';
-import { AnnotationsModal } from './Annotations';
+import { AnnotationsModal } from '@platforma-sdk/ui-vue';
 import ExportBtn from './ExportBtn.vue';
 
 const app = useApp();
@@ -49,7 +49,7 @@ const columns = ref<PTableColumnSpec[]>([]);
         <PlTableFilters v-model="app.model.ui.perSampleTable.filterModel" :columns="columns" />
       </PlAgDataTableToolsPanel>
       <ExportBtn />
-      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
+      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen.value = true">
         Annotations
       </PlBtnGhost>
       <PlBtnGhost icon="settings" @click.exact.stop="() => (app.model.ui.settingsOpen = true)">
@@ -62,7 +62,7 @@ const columns = ref<PTableColumnSpec[]>([]);
         v-model="app.model.ui.perSampleTable.tableState"
         :settings="tableSettings"
         show-columns-panel
-        @columns-changed="(newColumns) => (columns = newColumns)"
+        @columns-changed="(newColumns) => (columns.value = newColumns)"
       />
     </div>
   </PlBlockPage>
@@ -76,5 +76,10 @@ const columns = ref<PTableColumnSpec[]>([]);
       @update:model-value="setAnchorColumn"
     />
   </PlSlideModal>
-  <AnnotationsModal />
+  <AnnotationsModal
+    v-model:ui="app.model.ui.annotationScript"
+    v-model:args="app.model.args.annotationScript"
+    v-model:opened="app.isAnnotationModalOpen.value"
+    :columns="app.filterColumns.value"
+  />
 </template>
