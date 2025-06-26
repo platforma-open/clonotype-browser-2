@@ -7,6 +7,8 @@ import type {
   InferOutputsType,
   AnchoredPColumnSelector,
   PlDataTableStateV2,
+  AnnotationScript,
+  AnnotationScriptUi,
 } from '@platforma-sdk/model';
 import {
   BlockModel,
@@ -17,8 +19,6 @@ import {
   PColumnCollection,
 } from '@platforma-sdk/model';
 import * as R from 'remeda';
-import type { AnnotationScript } from './filter';
-import type { AnnotationScriptUi } from './filters_ui';
 
 type BlockArgs = {
   /** Anchor column from the clonotyping output (must have sampleId and clonotypeKey axes) */
@@ -399,9 +399,8 @@ export const platforma = BlockModel.create('Heavy')
 
   .done();
 
+export type Platforma = typeof platforma;
+
 export type BlockOutputs = InferOutputsType<typeof platforma>;
 export type Href = InferHrefType<typeof platforma>;
-export { BlockArgs };
-
-export * from './filter';
-export * from './filters_ui';
+export type { BlockArgs };

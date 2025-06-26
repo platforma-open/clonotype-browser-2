@@ -16,33 +16,13 @@
     "@changesets/cli": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",
-  "//": {
-    "pnpm": {
-      "overrides": {
-        "@platforma-sdk/ui-vue": "file:/Users/dbolotin/mi/core/platforma/sdk/ui-vue/package.tgz",
-        "@milaboratories/uikit": "file:/Users/dbolotin/mi/core/platforma/lib/ui/uikit/package.tgz",
-        "@platforma-sdk/tengo-builder": "file:/Users/dbolotin/mi/core/platforma/tools/tengo-builder/package.tgz",
-        "@milaboratories/pl-middle-layer": "file:/Users/dbolotin/mi/core/platforma/lib/node/pl-middle-layer/package.tgz",
-        "@platforma-open/milaboratories.mixcr-clonotyping-2": "file:/Users/dbolotin/mi/blocks/mixcr-clonotyping-2/block/package.tgz",
-        "@platforma-open/milaboratories.mixcr-clonotyping-2.workflow": "file:/Users/dbolotin/mi/blocks/mixcr-clonotyping-2/workflow/package.tgz",
-        "@platforma-sdk/model": "file:/Users/dbolotin/mi/core/platforma/sdk/model/package.tgz",
-        "@milaboratories/pl-model-common": "file:/Users/dbolotin/mi/core/platforma/lib/model/common/package.tgz",
-        "@platforma-sdk/workflow-tengo": "file:/Users/dbolotin/mi/core/platforma/sdk/workflow-tengo/package.tgz"
-      }
-    }
-  },
   "pnpm": {
-    "overrides": {}
-  },
-  "///": {
-    "pnpm": {
-      "overrides": {
-        "@milaboratories/pl-model-common": "file:/Users/poslavskysv/Projects/milab/platforma/platforma-sdk/lib/model/common/package.tgz",
-        "@platforma-sdk/model": "file:/Users/poslavskysv/Projects/milab/platforma/platforma-sdk/sdk/model/package.tgz",
-        "@platforma-sdk/ui-vue": "file:/Users/poslavskysv/Projects/milab/platforma/platforma-sdk/sdk/ui-vue/package.tgz",
-        "@platforma-sdk/workflow-tengo": "file:/Users/poslavskysv/Projects/milab/platforma/platforma-sdk/sdk/workflow-tengo/package.tgz",
-        "@milaboratories/uikit": "file:/Users/poslavskysv/Projects/milab/platforma/platforma-sdk/lib/ui/uikit/package.tgz"
-      }
+    "overrides": {
+      "@platforma-sdk/model": "link:/Users/aleksandr/Projects/MILAB/platforma/sdk/model/",
+      "@platforma-sdk/ui-vue": "link:/Users/aleksandr/Projects/MILAB/platforma/sdk/ui-vue/",
+      "@milaboratories/uikit": "link:/Users/aleksandr/Projects/MILAB/platforma/lib/ui/uikit/"
     }
+  },
+  "//": {
   }
 }

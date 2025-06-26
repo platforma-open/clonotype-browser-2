@@ -4,32 +4,36 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "watch": "vue-tsc && vite build --watch",
-    "build": "vue-tsc -b && vite build",
+    "watch": "vite build --watch",
+    "build:types": "vue-tsc -p tsconfig.app.build.json",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ."
   },
   "dependencies": {
-    "ag-grid-enterprise": "catalog:",
-    "ag-grid-vue3": "catalog:",
     "@platforma-open/milaboratories.clonotype-browser-2.model": "workspace:*",
     "@platforma-sdk/model": "catalog:",
     "@platforma-sdk/ui-vue": "catalog:",
+    "@vueuse/core": "catalog:",
+    "ag-grid-enterprise": "catalog:",
+    "ag-grid-vue3": "catalog:",
     "canonicalize": "catalog:",
     "vue": "catalog:",
-    "@vueuse/core": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@milaboratories/build-configs": "catalog:",
     "@milaboratories/helpers": "catalog:",
-    "@vitejs/plugin-vue": "catalog:",
+    "@milaboratories/ts-configs": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:",
     "@types/lodash": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
     "lodash": "catalog:",
+    "rollup-plugin-sourcemaps2": "catalog:",
+    "sass-embedded": "^1.89.2",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "vue-tsc": "catalog:",
-    "rollup-plugin-sourcemaps2": "catalog:"
+    "vue-tsc": "catalog:"
   }
 }

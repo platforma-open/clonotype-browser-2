@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "customConditions": ["default"],
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+  },
+  "include": ["src/main.ts"]
+}
