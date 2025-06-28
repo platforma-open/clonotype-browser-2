@@ -6,11 +6,11 @@ import {
   PlDropdownRef,
   PlSlideModal,
   PlTableFilters,
-  type PlAgDataTableSettings,
   PlAgDataTableToolsPanel,
   PlAgDataTableV2 as PlAgDataTable,
+  usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useApp } from './app';
 import { AnnotationsModal } from './Annotations';
 import ExportBtn from './ExportBtn.vue';
@@ -26,15 +26,11 @@ function setAnchorColumn(ref: PlRef | undefined) {
   }
 }
 
-const tableSettings = computed<PlAgDataTableSettings | undefined>(() =>
-  app.model.args.inputAnchor
-    ? {
-        sourceType: 'ptable',
-        model: app.model.outputs.perSampleTable?.model,
-        sheets: app.model.outputs.perSampleTable?.sheets ?? [],
-      }
-    : undefined,
-);
+const tableSettings = usePlDataTableSettingsV2({
+  sourceId: () => app.model.args.inputAnchor,
+  model: () => app.model.outputs.perSampleTable,
+  sheets: () => app.model.outputs.perSampleTableSheets,
+});
 const columns = ref<PTableColumnSpec[]>([]);
 
 </script>
@@ -62,7 +58,7 @@ const columns = ref<PTableColumnSpec[]>([]);
         v-model="app.model.ui.perSampleTable.tableState"
         :settings="tableSettings"
         show-columns-panel
-        @columns-changed="(newColumns) => (columns = newColumns)"
+        @columns-changed="(info) => (columns = info.columns)"
       />
     </div>
   </PlBlockPage>

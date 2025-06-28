@@ -1,6 +1,5 @@
 import type {
   InferHrefType,
-  PlDataTableState,
   PlRef,
   PlTableFiltersModel,
   PColumnSpec,
@@ -8,15 +7,15 @@ import type {
   PColumnEntryUniversal,
   InferOutputsType,
   AnchoredPColumnSelector,
+  PlDataTableStateV2,
 } from '@platforma-sdk/model';
 import {
   BlockModel,
-  createPlDataTable,
   createPlDataTableSheet,
+  createPlDataTableStateV2,
   createPlDataTableV2,
   getUniquePartitionKeys,
   PColumnCollection,
-  selectorsToPredicate,
 } from '@platforma-sdk/model';
 import * as R from 'remeda';
 import type { AnnotationScript } from './filter';
@@ -32,19 +31,19 @@ type BlockArgs = {
 
 export type UiState = {
   settingsOpen: boolean;
+  perSampleTable: {
+    tableState: PlDataTableStateV2;
+    filterModel: PlTableFiltersModel;
+  };
+  overlapTable: {
+    tableState: PlDataTableStateV2;
+    filterModel: PlTableFiltersModel;
+  };
   statsTable: {
-    tableState: PlDataTableState;
+    tableState: PlDataTableStateV2;
     filterModel: PlTableFiltersModel;
   };
   annotationScript: AnnotationScriptUi;
-  overlapTable: {
-    filterModel: PlTableFiltersModel;
-    tableState: PlDataTableState;
-  };
-  perSampleTable: {
-    filterModel: PlTableFiltersModel;
-    tableState: PlDataTableState;
-  };
 };
 
 export type SimplifiedPColumnSpec = Pick<PColumnSpec, 'valueType' | 'annotations'>;
@@ -105,23 +104,17 @@ export const platforma = BlockModel.create('Heavy')
 
   .withUiState<UiState>({
     settingsOpen: true,
-    overlapTable: {
-      filterModel: {},
-      tableState: {
-        gridState: {},
-      },
-    },
-    statsTable: {
-      tableState: {
-        gridState: {},
-      },
-      filterModel: {},
-    },
     perSampleTable: {
       filterModel: {},
-      tableState: {
-        gridState: {},
-      },
+      tableState: createPlDataTableStateV2(),
+    },
+    overlapTable: {
+      filterModel: {},
+      tableState: createPlDataTableStateV2(),
+    },
+    statsTable: {
+      filterModel: {},
+      tableState: createPlDataTableStateV2(),
     },
     annotationScript: {
       title: 'My Annotation',
@@ -305,21 +298,13 @@ export const platforma = BlockModel.create('Heavy')
     return createPlDataTableV2(
       ctx,
       columns,
-      selectorsToPredicate({
-        name: 'pl7.app/vdj/sequence',
-        domain: {
-          'pl7.app/vdj/feature': 'CDR3',
-          'pl7.app/alphabet': 'nucleotide',
-        },
-      }),
       ctx.uiState.overlapTable.tableState,
       { filters: ctx.uiState.overlapTable.filterModel?.filters },
     );
   })
 
-  .output('perSampleTable', (ctx) => {
-    if (ctx.args.inputAnchor === undefined)
-      return undefined;
+  .output('perSampleTableSheets', (ctx) => {
+    if (ctx.args.inputAnchor === undefined) return undefined;
 
     const anchor = ctx.resultPool.getPColumnByRef(ctx.args.inputAnchor);
     if (!anchor) return undefined;
@@ -327,7 +312,14 @@ export const platforma = BlockModel.create('Heavy')
     const samples = getUniquePartitionKeys(anchor.data)?.[0];
     if (!samples) return undefined;
 
-    const sheets = [createPlDataTableSheet(ctx, anchor.spec.axesSpec[0], samples)];
+    return [createPlDataTableSheet(ctx, anchor.spec.axesSpec[0], samples)];
+  })
+
+  .output('perSampleTable', (ctx) => {
+    if (ctx.args.inputAnchor === undefined) return undefined;
+
+    const anchor = ctx.resultPool.getPColumnByRef(ctx.args.inputAnchor);
+    if (!anchor) return undefined;
 
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.inputAnchor });
     if (!anchorCtx) return undefined;
@@ -363,24 +355,12 @@ export const platforma = BlockModel.create('Heavy')
 
     if (!columns) return undefined;
 
-    const model = createPlDataTableV2(
+    return createPlDataTableV2(
       ctx,
       columns,
-      selectorsToPredicate({
-        name: 'pl7.app/vdj/sequence',
-        domain: {
-          'pl7.app/vdj/feature': 'CDR3',
-          'pl7.app/alphabet': 'nucleotide',
-        },
-      }),
       ctx.uiState.perSampleTable.tableState,
       { filters: ctx.uiState.perSampleTable.filterModel?.filters },
     );
-
-    return {
-      model,
-      sheets,
-    };
   })
 
   .output('statsTable', (ctx) => {
@@ -396,9 +376,12 @@ export const platforma = BlockModel.create('Heavy')
 
       if (columnsAfterSplitting === undefined) return undefined;
 
-      return createPlDataTable(ctx, columnsAfterSplitting, ctx.uiState.statsTable.tableState, {
-        filters: ctx.uiState.statsTable.filterModel?.filters,
-      });
+      return createPlDataTableV2(
+        ctx,
+        columnsAfterSplitting,
+        ctx.uiState.statsTable.tableState,
+        { filters: ctx.uiState.statsTable.filterModel?.filters },
+      );
     }
     return undefined;
   })

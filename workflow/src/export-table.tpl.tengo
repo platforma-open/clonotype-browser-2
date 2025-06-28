@@ -5,6 +5,7 @@ file := import("@platforma-sdk/workflow-tengo:file")
 pframes := import("@platforma-sdk/workflow-tengo:pframes")
 maps := import("@platforma-sdk/workflow-tengo:maps")
 slices := import("@platforma-sdk/workflow-tengo:slices")
+math := import("math")
 pt := import("@platforma-sdk/workflow-tengo:pt")
 
 util := import(":util")
@@ -59,9 +60,11 @@ self.body(func(inputs) {
 		}
 	}
 
+	numberOfSamples := len(partitionsPerSample)
+
 	perSampleTsvFiles := {}
 	maps.forEach(partitionsPerSample, func(key, partitions) {
-		builder := pframes.tsvFileBuilder()
+		builder := pframes.tsvFileBuilder().cpu(2).mem("12GiB")
 		axisHeaderSet := false
 		for partition in partitions {
 			sampleLabel := sampleLabelsMap[key]
@@ -107,7 +110,9 @@ self.body(func(inputs) {
 	// Creating the big table
 	//
 
-	bigTableWf := pt.workflow()
+	bigTableWf := pt.workflow().
+		cpu(math.max(numberOfSamples, 2)).
+		mem(string(int(math.min(math.max(numberOfSamples, 2) * 8, 128))) + "GiB")
 	// perClonotypePf := bigTableWf.frame(perClonotypeTsv, { xsvType: "tsv", inferSchema: false })
 
 	pfs := []
@@ -122,7 +127,7 @@ self.body(func(inputs) {
 			continue
 		}
 		if tsvBuilder == undefined {
-			tsvBuilder = pframes.tsvFileBuilder()
+			tsvBuilder = pframes.tsvFileBuilder().cpu(1).mem("4GiB")
 			tsvBuilder.setAxisHeader(column.spec.axesSpec[0], cloneKeyAxisHeader)
 		}
 		byCloneSpecs += [column.spec]

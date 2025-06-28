@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { PlRef, PTableColumnSpec } from '@platforma-sdk/model';
-import { plRefsEqual } from '@platforma-sdk/model';
+import { canonicalizeJson } from '@platforma-sdk/model';
 import {
   PlBlockPage,
   PlBtnGhost,
   PlDropdownRef,
   PlSlideModal,
   PlTableFilters,
-  type PlAgDataTableSettings,
   PlAgDataTableToolsPanel,
   PlAgDataTableV2 as PlAgDataTable,
+  usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useApp } from './app';
 import { AnnotationsModal } from './Annotations';
 import ExportBtn from './ExportBtn.vue';
@@ -22,14 +22,10 @@ function setAnchorColumn(ref: PlRef | undefined) {
   app.model.args.inputAnchor = ref;
 }
 
-const tableSettings = computed<PlAgDataTableSettings | undefined>(() =>
-  app.model.args.inputAnchor
-    ? {
-        sourceType: 'ptable',
-        model: app.model.outputs.overlapTable,
-      }
-    : undefined,
-);
+const tableSettings = usePlDataTableSettingsV2({
+  sourceId: () => app.model.args.inputAnchor,
+  model: () => app.model.outputs.overlapTable,
+});
 const columns = ref<PTableColumnSpec[]>([]);
 </script>
 
@@ -56,7 +52,7 @@ const columns = ref<PTableColumnSpec[]>([]);
         v-model="app.model.ui.overlapTable.tableState"
         :settings="tableSettings"
         show-columns-panel
-        @columns-changed="(newColumns) => (columns = newColumns)"
+        @columns-changed="(info) => (columns = info.columns)"
       />
     </div>
   </PlBlockPage>

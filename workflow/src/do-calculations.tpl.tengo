@@ -12,6 +12,7 @@ exec := import("@platforma-sdk/workflow-tengo:exec")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 json := import("json")
 text := import("text")
+math := import("math")
 strings := import("@platforma-sdk/workflow-tengo:strings")
 
 util := import(":util")
@@ -76,8 +77,10 @@ self.body(func(inputs) {
 
 	scriptColumns := util.extractColumnsFromFilter(rawAnnotationScript) // Already returns unique list
 
-	clonoTableBuilder := pFrames.tsvFileBuilder()
-	sampleTableBuilder := pFrames.tsvFileBuilder()
+	numberOfColumns := len(scriptColumns)
+
+	clonoTableBuilder := pFrames.tsvFileBuilder().cpu(1).mem(string(1 + numberOfColumns * 2) + "GiB")
+	sampleTableBuilder := pFrames.tsvFileBuilder().cpu(1).mem(string(1 + numberOfColumns * 2) + "GiB")
 
 	clonoTableBuilder.setAxisHeader(clonotypeAxisSpec, CLONOTYPE_KEY_HEADER)
 
@@ -142,6 +145,8 @@ self.body(func(inputs) {
 
 	cmd := exec.builder().
 		printErrStreamToStdout().
+		cpu(math.max(numberOfColumns + 1, 16)).
+		mem(string(int(math.min(math.max(numberOfColumns, 2) * 4, 96))) + "GiB").
 		software(annotatorSw)
 
 	cmd.writeFile("script.json", json.encode(finalAnnotationScript))
@@ -204,7 +209,9 @@ self.body(func(inputs) {
 			spec: { valueType: "String" }
 		} ],
 		partitionKeyLength: partitionKeyLength,
-		storageFormat: "Binary"
+		storageFormat: "Binary",
+		mem: "12GiB",
+		cpu: 1
 	}, { dataOnly: true })
 
 	annotationData := importedDataMap.getFutureInputField(ANNOTATION_LABEL_HEADER)
@@ -270,6 +277,8 @@ self.body(func(inputs) {
 	filterCmd := exec.builder().
 		printErrStreamToStdout().
 		software(annotation2filtersSw).
+		cpu(4).
+		mem(string(int(12 + math.min(math.max(len(uniqueLabels), 2) * 2, 46))) + "GiB").
 		addFile("input.tsv", processedResult).
 		arg("--input").arg("input.tsv").
 		writeFile("input_schema.json", json.encode(filterInputSchema)).
@@ -299,7 +308,7 @@ self.body(func(inputs) {
 			storageFormat: "Binary"
 		}
 
-		filterImportMap := xsv.importFile(filterTsv, "tsv", filterImportSpec, { dataOnly: true })
+		filterImportMap := xsv.importFile(filterTsv, "tsv", filterImportSpec, { dataOnly: true, cpu: 1, mem: "8GiB" })
 		filterData := filterImportMap.getFutureInputField("one")
 
 		filterColumnSpec := {
@@ -375,7 +384,7 @@ self.body(func(inputs) {
 		})), data: annotationData }
 	]
 
-	statsTsv := xsv.exportFrame(statsInputData, "tsv", { naStr: "NaN", nullStr: "null" })
+	statsTsv := xsv.exportFrame(statsInputData, "tsv", { naStr: "NaN", nullStr: "null", cpu: 1, mem: "8GiB" })
 
 	TOTAL_FRACTION_HEADER := FRACTION_VALUE_HEADER + "_sum"
 	CLONOTYPE_COUNT_HEADER := FRACTION_VALUE_HEADER + "_count"
@@ -394,6 +403,8 @@ self.body(func(inputs) {
 	transformCmd := exec.builder().
 		printErrStreamToStdout().
 		software(ptransformSw).
+		cpu(1).
+		mem("8GiB").
 		writeFile("wf.json", json.encode(transformParams)).
 		arg("--workflow").arg("wf.json").
 		addFile("input.tsv", statsTsv).
@@ -419,7 +430,7 @@ self.body(func(inputs) {
 		storageFormat: "Binary"
 	}
 
-	statsImportedMap := xsv.importFile(aggregatedTsv, "tsv", statsImportSpec, { dataOnly: true })
+	statsImportedMap := xsv.importFile(aggregatedTsv, "tsv", statsImportSpec, { dataOnly: true, cpu: 1, mem: "2GiB" })
 
 	totalFractionData := statsImportedMap.getFutureInputField(TOTAL_FRACTION_HEADER)
 	numberOfClonotypesData := statsImportedMap.getFutureInputField(CLONOTYPE_COUNT_HEADER)
