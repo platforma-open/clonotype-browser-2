@@ -20,9 +20,8 @@
     "overrides": {
       "@platforma-sdk/model": "link:/Users/aleksandr/Projects/MILAB/platforma/sdk/model/",
       "@platforma-sdk/ui-vue": "link:/Users/aleksandr/Projects/MILAB/platforma/sdk/ui-vue/",
-      "@milaboratories/uikit": "link:/Users/aleksandr/Projects/MILAB/platforma/lib/ui/uikit/"
+      "@milaboratories/uikit": "link:/Users/aleksandr/Projects/MILAB/platforma/lib/ui/uikit/",
+      "@milaboratories/helpers": "link:/Users/aleksandr/Projects/MILAB/platforma/lib/util/helpers/"
     }
-  },
-  "//": {
   }
 }

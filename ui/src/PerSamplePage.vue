@@ -37,7 +37,7 @@ const tableSettings = usePlDataTableSettingsV2({
     </template>
     <template #append>
       <ExportBtn />
-      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen.value = true">
+      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
         Annotations
       </PlBtnGhost>
       <PlBtnGhost icon="settings" @click.exact.stop="() => (app.model.ui.settingsOpen = true)">
@@ -61,9 +61,8 @@ const tableSettings = usePlDataTableSettingsV2({
     />
   </PlSlideModal>
   <AnnotationsModal
-    v-model:ui="app.model.ui.annotationScript"
-    v-model:args="app.model.args.annotationScript"
-    v-model:opened="app.isAnnotationModalOpen.value"
-    :columns="app.filterColumns.value"
+    v-model:annotation="app.model.ui.annotationScript"
+    v-model:opened="app.isAnnotationModalOpen"
+    :columns="app.filterColumns"
   />
 </template>

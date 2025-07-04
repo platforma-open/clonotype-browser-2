@@ -18,16 +18,18 @@
   },
   "dependencies": {
     "@platforma-sdk/model": "catalog:",
+    "@types/lodash.omit": "^4.5.9",
+    "lodash.omit": "^4.5.0",
     "remeda": "catalog:"
   },
   "devDependencies": {
     "@platforma-sdk/block-tools": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:",
     "eslint": "catalog:",
-    "vitest": "catalog:",
+    "tsup": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "tsup": "catalog:"
+    "vitest": "catalog:"
   },
   "tsup": {
     "entry": [

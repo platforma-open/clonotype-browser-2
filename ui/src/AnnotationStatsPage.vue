@@ -6,7 +6,6 @@ import {
   usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
 import { AnnotationsModal } from '@platforma-sdk/ui-vue';
-import { computed, ref } from 'vue';
 import { useApp } from './app';
 
 const app = useApp();
@@ -35,8 +34,7 @@ const tableSettings = usePlDataTableSettingsV2({
     />
   </PlBlockPage>
   <AnnotationsModal
-    v-model:ui="app.model.ui.annotationScript"
-    v-model:args="app.model.args.annotationScript"
+    v-model:annotation="app.model.ui.annotationScript"
     v-model:opened="app.isAnnotationModalOpen"
     :columns="app.filterColumns"
   />

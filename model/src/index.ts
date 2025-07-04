@@ -1,3 +1,4 @@
+import omit from 'lodash.omit';
 import type {
   InferHrefType,
   PlRef,
@@ -18,7 +19,6 @@ import {
   getUniquePartitionKeys,
   PColumnCollection,
 } from '@platforma-sdk/model';
-import * as R from 'remeda';
 
 type BlockArgs = {
   /** Anchor column from the clonotyping output (must have sampleId and clonotypeKey axes) */
@@ -65,7 +65,7 @@ const simplifyColumnEntries = (
 
   const ret = entries.map((entry) => {
     const filteredAnnotations = entry.spec.annotations
-      ? R.omit(entry.spec.annotations, excludedAnnotationKeys)
+      ? omit(entry.spec.annotations, excludedAnnotationKeys)
       : undefined;
 
     return {
