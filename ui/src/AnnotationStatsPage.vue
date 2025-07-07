@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {
+  PlAgDataTableV2,
+  PlAnnotationsModal,
   PlBlockPage,
   PlBtnGhost,
-  PlAgDataTableV2,
   usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
-import { AnnotationsModal } from '@platforma-sdk/ui-vue';
 import { useApp } from './app';
 
 const app = useApp();
@@ -33,7 +33,7 @@ const tableSettings = usePlDataTableSettingsV2({
       show-export-button
     />
   </PlBlockPage>
-  <AnnotationsModal
+  <PlAnnotationsModal
     v-model:annotation="app.model.ui.annotationScript"
     v-model:opened="app.isAnnotationModalOpen"
     :columns="app.filterColumns"
