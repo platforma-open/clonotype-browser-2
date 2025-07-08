@@ -1,25 +1,23 @@
-import { defineApp, annotationModelController } from '@platforma-sdk/ui-vue';
-import AnnotationStatsPage from './AnnotationStatsPage.vue';
-import { ref, computed } from 'vue';
-import PerSamplePage from './PerSamplePage.vue';
-import OverlapPage from './OverlapPage.vue';
 import type { Platforma, SimplifiedUniversalPColumnEntry } from '@platforma-open/milaboratories.clonotype-browser-2.model';
+import type { PFrameHandle } from '@platforma-sdk/model';
+import { annotationModelController, defineApp } from '@platforma-sdk/ui-vue';
+import { computed, ref } from 'vue';
+import AnnotationStatsPage from './AnnotationStatsPage.vue';
+import OverlapPage from './OverlapPage.vue';
+import PerSamplePage from './PerSamplePage.vue';
+import { getValuesForSelectedColumns } from './utils';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
   const isAnnotationModalOpen = ref(false);
-
+  const hasSelectedColumns = computed(() => {
+    return app.model.ui.selectedColumns?.selectedKeys.length > 0;
+  });
   const filterColumns = computed((): SimplifiedUniversalPColumnEntry[] => {
-    if (app.model.args.annotationScript.mode === 'bySampleAndClonotype') {
-      const { bySampleAndClonotypeColumns, byClonotypeColumns } = app.model.outputs;
+    const { bySampleAndClonotypeColumns, byClonotypeColumns } = app.model.outputs;
 
-      if (!bySampleAndClonotypeColumns || !byClonotypeColumns) {
-        return [];
-      }
-
-      return [...bySampleAndClonotypeColumns, ...byClonotypeColumns];
-    }
-
-    return app.model.outputs.byClonotypeColumns ?? [];
+    return app.model.args.annotationScript.mode === 'bySampleAndClonotype'
+      ? [...(bySampleAndClonotypeColumns?.columns ?? []), ...(byClonotypeColumns?.columns ?? [])]
+      : (byClonotypeColumns?.columns ?? []);
   });
 
   annotationModelController(
@@ -27,7 +25,27 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
     () => app.model.ui.annotationScript,
   );
 
+  if (app.model.ui.selectedColumns === undefined) {
+    app.model.ui.selectedColumns = {
+      axesSpec: [],
+      selectedKeys: [],
+    };
+  }
+
   return {
+    getValuesForSelectedColumns: () => {
+      const { bySampleAndClonotypeColumns, byClonotypeColumns } = app.model.outputs;
+      const pFrame = app.model.args.annotationScript.mode === 'bySampleAndClonotype'
+        ? [byClonotypeColumns?.pFrame, bySampleAndClonotypeColumns?.pFrame]
+        : [byClonotypeColumns?.pFrame];
+
+      if (pFrame.some((pf) => pf === undefined)) {
+        throw new Error('Platforma PFrame is not available');
+      }
+
+      return getValuesForSelectedColumns(app.model.ui.selectedColumns, pFrame as PFrameHandle[]);
+    },
+    hasSelectedColumns,
     isAnnotationModalOpen,
     filterColumns,
     routes: {

@@ -37,5 +37,7 @@ const tableSettings = usePlDataTableSettingsV2({
     v-model:annotation="app.model.ui.annotationScript"
     v-model:opened="app.isAnnotationModalOpen"
     :columns="app.filterColumns"
+    :hasSelectedColumns="app.hasSelectedColumns"
+    :getValuesForSelectedColumns="app.getValuesForSelectedColumns"
   />
 </template>

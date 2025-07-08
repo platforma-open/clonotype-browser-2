@@ -1,15 +1,18 @@
-import omit from 'lodash.omit';
 import type {
-  InferHrefType,
-  PlRef,
-  PColumnSpec,
-  SUniversalPColumnId,
-  PColumnEntryUniversal,
-  InferOutputsType,
   AnchoredPColumnSelector,
-  PlDataTableStateV2,
   AnnotationScript,
   AnnotationScriptUi,
+  InferHrefType,
+  InferOutputsType,
+  PColumn,
+  PColumnDataUniversal,
+  PColumnEntryUniversal,
+  PColumnSpec,
+  PlDataTableStateV2,
+  PlRef,
+  PlSelectionModel,
+  PObjectId,
+  SUniversalPColumnId,
 } from '@platforma-sdk/model';
 import {
   BlockModel,
@@ -19,6 +22,7 @@ import {
   getUniquePartitionKeys,
   PColumnCollection,
 } from '@platforma-sdk/model';
+import omit from 'lodash.omit';
 
 type BlockArgs = {
   /** Anchor column from the clonotyping output (must have sampleId and clonotypeKey axes) */
@@ -39,6 +43,7 @@ export type UiState = {
   statsTable: {
     tableState: PlDataTableStateV2;
   };
+  selectedColumns: PlSelectionModel;
   annotationScript: AnnotationScriptUi;
 };
 
@@ -114,6 +119,10 @@ export const platforma = BlockModel.create('Heavy')
       mode: 'byClonotype',
       steps: [],
     },
+    selectedColumns: {
+      axesSpec: [],
+      selectedKeys: [],
+    },
   })
 
   .output('inputOptions', (ctx) =>
@@ -161,7 +170,17 @@ export const platforma = BlockModel.create('Heavy')
         }],
         { anchorCtx },
       );
-    return simplifyColumnEntries(entries);
+    return {
+      columns: simplifyColumnEntries(entries),
+      pFrame: ctx.createPFrame(entries
+        ?.map((e) => {
+          return {
+            id: e.id as PObjectId,
+            spec: e.spec,
+            data: e.data(),
+          };
+        }).filter((e): e is PColumn<PColumnDataUniversal> => e.data !== undefined) ?? []),
+    };
   })
 
   .output('bySampleAndClonotypeColumns', (ctx) => {
@@ -183,7 +202,17 @@ export const platforma = BlockModel.create('Heavy')
         },
         { anchorCtx },
       );
-    return simplifyColumnEntries(entries);
+    return {
+      columns: simplifyColumnEntries(entries),
+      pFrame: ctx.createPFrame(entries
+        ?.map((e) => {
+          return {
+            id: e.id as PObjectId,
+            spec: e.spec,
+            data: e.data(),
+          };
+        }).filter((e): e is PColumn<PColumnDataUniversal> => e.data !== undefined) ?? []),
+    };
   })
 
   .output('mainAbundanceColumn', (ctx) => {

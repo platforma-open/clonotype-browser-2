@@ -42,6 +42,7 @@ const tableSettings = usePlDataTableSettingsV2({
     <PlAgDataTableV2
       ref="tableInstance"
       v-model="app.model.ui.overlapTable.tableState"
+      v-model:selection="app.model.ui.selectedColumns"
       :settings="tableSettings"
     />
   </PlBlockPage>
@@ -59,5 +60,7 @@ const tableSettings = usePlDataTableSettingsV2({
     v-model:annotation="app.model.ui.annotationScript"
     v-model:opened="app.isAnnotationModalOpen"
     :columns="app.filterColumns"
+    :hasSelectedColumns="app.hasSelectedColumns"
+    :getValuesForSelectedColumns="app.getValuesForSelectedColumns"
   />
 </template>
