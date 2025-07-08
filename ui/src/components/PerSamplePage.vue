@@ -9,7 +9,7 @@ import {
   PlSlideModal,
   usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
-import { useApp } from './app';
+import { useApp } from '../app';
 import ExportBtn from './ExportBtn.vue';
 
 const app = useApp();

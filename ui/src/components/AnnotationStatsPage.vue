@@ -6,7 +6,7 @@ import {
   PlBtnGhost,
   usePlDataTableSettingsV2,
 } from '@platforma-sdk/ui-vue';
-import { useApp } from './app';
+import { useApp } from '../app';
 
 const app = useApp();
 

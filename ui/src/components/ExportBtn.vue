@@ -2,7 +2,7 @@
 import { getRawPlatformaInstance } from '@platforma-sdk/model';
 import { PlBtnGhost } from '@platforma-sdk/ui-vue';
 import { ref } from 'vue';
-import { useApp } from './app';
+import { useApp } from '../app';
 
 const app = useApp();
 const exporting = ref(false);

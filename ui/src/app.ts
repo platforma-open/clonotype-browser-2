@@ -2,11 +2,11 @@ import type { Platforma, SimplifiedUniversalPColumnEntry } from '@platforma-open
 import type { PFrameHandle } from '@platforma-sdk/model';
 import { defineApp } from '@platforma-sdk/ui-vue';
 import { computed, ref } from 'vue';
-import AnnotationStatsPage from './AnnotationStatsPage.vue';
+import AnnotationStatsPage from './components/AnnotationStatsPage.vue';
+import OverlapPage from './components/OverlapPage.vue';
+import PerSamplePage from './components/PerSamplePage.vue';
 import { migrateUiState } from './migration';
 import { processAnnotatiuoUiStateToArgs } from './model';
-import OverlapPage from './OverlapPage.vue';
-import PerSamplePage from './PerSamplePage.vue';
 import { getValuesForSelectedColumns } from './utils';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
