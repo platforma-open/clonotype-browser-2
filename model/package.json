@@ -13,8 +13,7 @@
   },
   "scripts": {
     "build": "tsup && vite build && block-tools build-model",
-    "lint": "eslint .",
-    "test": "vitest"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@platforma-sdk/model": "catalog:",
