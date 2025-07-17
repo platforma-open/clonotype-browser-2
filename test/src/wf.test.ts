@@ -1,28 +1,27 @@
 import type {
+  BlockArgs,
+  BlockOutputs,
+  platforma,
+  SimplifiedUniversalPColumnEntry,
+} from '@platforma-open/milaboratories.clonotype-browser-2.model';
+import { blockSpec as clonotypingBlockSpec } from '@platforma-open/milaboratories.mixcr-clonotyping-2';
+import type {
   BlockArgs as MiXCRClonotypingBlockArgs,
   BlockOutputs as MiXCRClonotypingBlockOutputs,
-  platforma as mixcrPlatforma } from '@platforma-open/milaboratories.mixcr-clonotyping-2.model';
+  platforma as mixcrPlatforma,
+} from '@platforma-open/milaboratories.mixcr-clonotyping-2.model';
 import {
   SupportedPresetList,
   uniquePlId,
 } from '@platforma-open/milaboratories.mixcr-clonotyping-2.model';
-import type { RawHelpers } from '@platforma-sdk/test';
-import { awaitStableState, blockTest } from '@platforma-sdk/test';
 import { blockSpec as samplesAndDataBlockSpec } from '@platforma-open/milaboratories.samples-and-data';
 import type { BlockArgs as SamplesAndDataBlockArgs } from '@platforma-open/milaboratories.samples-and-data.model';
-import { blockSpec as clonotypingBlockSpec } from '@platforma-open/milaboratories.mixcr-clonotyping-2';
-import { blockSpec as annotationBlockSpec } from 'this-block';
-import type {
-  BlockArgs,
-  BlockOutputs,
-  platforma,
-  AnnotationScript,
-  SimplifiedUniversalPColumnEntry,
-} from '@platforma-open/milaboratories.clonotype-browser-2.model';
-import type { InferBlockState, SUniversalPColumnId } from '@platforma-sdk/model';
+import type { AnnotationScript, InferBlockState, SUniversalPColumnId } from '@platforma-sdk/model';
 import { wrapOutputs } from '@platforma-sdk/model';
-import type { ML } from '@platforma-sdk/test';
-import { test, type expect as vitestExpect } from 'vitest';
+import type { ML, RawHelpers } from '@platforma-sdk/test';
+import { awaitStableState, blockTest } from '@platforma-sdk/test';
+import { blockSpec as annotationBlockSpec } from 'this-block';
+import { type expect as vitestExpect } from 'vitest';
 
 // Helper function for common setup
 async function setupProject(
