@@ -226,7 +226,7 @@ blockTest(
     )) as InferBlockState<typeof platforma>;
 
     const outputs5 = wrapOutputs<BlockOutputs>(annotationStableState2.outputs);
-    console.dir({ byClonotypeColumns: outputs5.byClonotypeColumns }, { depth: 8 });
+    console.dir({ byClonotypeColumns: outputs5.byClonotypeColumns?.columns }, { depth: 8 });
 
     // Find column IDs from byClonotypeColumns
     const readCount652Column = findColumnId(outputs5.byClonotypeColumns?.columns, (l) => l.includes('Number Of Reads / SRR11233652'));
