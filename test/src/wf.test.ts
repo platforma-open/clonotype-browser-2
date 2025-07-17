@@ -21,7 +21,7 @@ import { wrapOutputs } from '@platforma-sdk/model';
 import type { ML, RawHelpers } from '@platforma-sdk/test';
 import { awaitStableState, blockTest } from '@platforma-sdk/test';
 import { blockSpec as annotationBlockSpec } from 'this-block';
-import { type expect as vitestExpect } from 'vitest';
+import type { expect as vitestExpect } from 'vitest';
 
 // Helper function for common setup
 async function setupProject(
